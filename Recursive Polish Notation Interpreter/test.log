@@ -1,0 +1,231 @@
+Enter a test case number (1-20, 0 to run all): 
+
+====================
+Test 1
+====================
+
+s: "Hello world!"
+eq(s, s): 1
+
+====================
+Test 2
+====================
+
+s1: "Hello world!"
+s2: "Hello hello!"
+eq(s1, s2): 0
+
+====================
+Test 3
+====================
+
+s1: "Hello world!"
+s2: "Hello hello!"
+copy(s1, s2);
+strcmp(s1, s2): 0
+
+====================
+Test 4
+====================
+
+ctx_k: { "" }
+ctx_v: { }
+ctx_append("a", 42, ctx_k, ctx_v, 20);
+is ctx_k { "a", "" }? 1
+is ctx_v { 42 }? 1
+
+====================
+Test 5
+====================
+
+ctx_k: { "" }
+ctx_v: { }
+ctx_append("a", 42, ctx_k, ctx_v, 20);
+ctx_append("b", 43, ctx_k, ctx_v, 20);
+ctx_append("c", 44, ctx_k, ctx_v, 20);
+is ctx_k { "a", "b", "c", "" }? 1
+is ctx_v { 42, 43, 44 }? 1
+
+====================
+Test 6
+====================
+
+ctx_k: { "a", "b", "c", "" }
+ctx_v: { 42, 43, 44 }
+ctx_remove(ctx_k, ctx_v);
+is ctx_k { "a", "b", "" }? 1
+is ctx_v { 42, 43 }? 1
+
+====================
+Test 7
+====================
+
+ctx_k: { "a", "b", "c", "" }
+ctx_v: { 42, 43, 44 }
+ctx_lookup("a", ctx_k, ctx_v): 42
+ctx_lookup("b", ctx_k, ctx_v): 43
+ctx_lookup("c", ctx_k, ctx_v): 44
+
+====================
+Test 8
+====================
+
+ctx_k: { "a", "b", "c", "" }
+ctx_v: { 42, 43, 44 }
+ctx_lookup("a", ctx_k, ctx_v): 42
+ctx_lookup("b", ctx_k, ctx_v): 43
+ctx_lookup("c", ctx_k, ctx_v): 44
+
+====================
+Test 9
+====================
+
+ctx_k: { "a", "a", "a", "" }
+ctx_v: { 42, 43, 44 }
+ctx_lookup("a", ctx_k, ctx_v): 44
+
+====================
+Test 10
+====================
+
+prog: 42
+cur: 0
+ctx_k: { }
+ctx_v: { }
+eval_impl(prog, cur, ctx_k, ctx_v): 42
+cur: 1
+
+====================
+Test 11
+====================
+
+prog: a
+cur: 0
+ctx_k: { "a", "b", "c1A", "" }
+ctx_v: { 42, 43, 44 }
+eval_impl(prog, cur, ctx_k, ctx_v): 42
+cur: 1
+
+====================
+Test 12
+====================
+
+prog: c1A
+cur: 0
+ctx_k: { "a", "b", "c1A", "" }
+ctx_v: { 42, 43, 44 }
+eval_impl(prog, cur, ctx_k, ctx_v): 44
+cur: 1
+
+====================
+Test 13
+====================
+
+ctx_k: { }
+ctx_v: { }
+
+prog1: ADD 7 3
+cur1: 0
+eval_impl(prog1, cur1, ctx_k, ctx_v): 10
+cur1: 3
+
+prog2: SUB 7 3
+cur2: 0
+eval_impl(prog2, cur2, ctx_k, ctx_v): 4
+cur2: 3
+
+prog3: MUL 7 3
+cur3: 0
+eval_impl(prog3, cur3, ctx_k, ctx_v): 21
+cur3: 3
+
+prog4: DIV 7 3
+cur4: 0
+eval_impl(prog4, cur4, ctx_k, ctx_v): 2
+cur4: 3
+
+prog5: MOD 7 3
+cur5: 0
+eval_impl(prog5, cur5, ctx_k, ctx_v): 1
+cur5: 3
+
+
+====================
+Test 14
+====================
+
+prog: LET foo 42 0
+cur: 0
+ctx_k: { "" }
+ctx_v: { }
+eval_impl(prog, cur, ctx_k, ctx_v): 0
+cur: 4
+is ctx_k { "" }? 1
+is ctx_v { }? 1
+
+====================
+Test 15
+====================
+
+prog: LET foo 42 foo
+cur: 0
+ctx_k: { "" }
+ctx_v: { }
+eval_impl(prog, cur, ctx_k, ctx_v): 42
+cur: 4
+is ctx_k { "" }? 1
+is ctx_v { }? 1
+
+====================
+Test 16
+====================
+
+prog: LET a 2 LET a2 MUL a a LET a4 MUL a2 a2 MUL a2 a4
+cur: 0
+ctx_k: { "" }
+ctx_v: { }
+eval_impl(prog, cur, ctx_k, ctx_v): 64
+cur: 16
+is ctx_k { "" }? 1
+is ctx_v { }? 1
+
+====================
+Test 17
+====================
+
+prog: ADD LET a 2 MUL a a 2
+cur: 0
+ctx_k: { "" }
+ctx_v: { }
+eval_impl(prog, cur, ctx_k, ctx_v): 6
+cur: 8
+is ctx_k { "" }? 1
+is ctx_v { }? 1
+
+====================
+Test 18
+====================
+
+prog: LET a 2 LET b 3 LET a 5 MUL a b
+cur: 0
+ctx_k: { "" }
+ctx_v: { }
+eval_impl(prog, cur, ctx_k, ctx_v): 15
+cur: 12
+is ctx_k { "" }? 1
+is ctx_v { }? 1
+
+====================
+Test 19
+====================
+
+prog: ADD 42 1
+eval(prog): 43
+
+====================
+Test 20
+====================
+
+prog: LET a2 LET a 2 MUL a a LET a4 MUL a2 a2 MUL a2 a4
+eval(prog): 64
+
